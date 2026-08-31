@@ -23,12 +23,14 @@ Set `VITE_API_URL` when the API is not running at `http://localhost:8080/api`.
 
 - Internly branded responsive shell
 - Common login page for students and admins
+- Student registration, email verification OTP, and resend-code screens
 - JWT session storage and logout
 - Backend-authorized student/admin route guards
 - Student and admin dashboard entry points
 - Toast notifications and basic loading-aware login interaction
+- Shared branded logo asset used in the navigation and authentication surfaces
 
-The client is being developed in vertical slices alongside the separate `internly-server` repository. Authentication UI will expand with registration OTP and password reset flows as those API contracts are implemented.
+The client is being developed in vertical slices alongside the separate `internly-server` repository. Password reset will be added in the next authentication slice.
 
 ## Build
 
