@@ -40,7 +40,9 @@ async function api(path, options = {}) {
 
 function Shell({ children }) {
   const session = getSession();
+  const [unread, setUnread] = useState(0);
   const navigate = useNavigate();
+  useEffect(() => { if (session?.role === "STUDENT") api("/notifications/unread-count").then(setUnread).catch(() => {}); }, [session?.role]);
   const logout = () => {
     localStorage.removeItem("internly-session");
     navigate("/login");
@@ -55,6 +57,7 @@ function Shell({ children }) {
           <div className="d-flex align-items-center gap-3">
             {session && (
               <>
+                {session.role === "STUDENT" && <Link className="small text-decoration-none" to="/student/notifications">Notifications {unread > 0 && <span className="badge rounded-pill text-bg-primary">{unread}</span>}</Link>}
                 <span className="text-secondary small">{session.email}</span>
                 <button
                   className="btn btn-outline-dark btn-sm"
@@ -349,12 +352,15 @@ function Recommendations() {
   return <div className="container py-5"><Link className="small text-decoration-none" to="/student">← Dashboard</Link><div className="eyebrow mt-3">For you</div><h1 className="display-6 fw-semibold">Recommended for your profile.</h1><p className="text-secondary">Every score is explainable: skills, domain, qualification, and interests all contribute.</p>{loading ? <p className="text-secondary mt-5">Calculating your matches…</p> : items.length ? <div className="row g-4 mt-2">{items.map((item) => <div className="col-md-6 col-lg-4" key={item.id}><div className="feature-card h-100"><div className="d-flex justify-content-between align-items-start"><div className="eyebrow">{item.internship.domain}</div><span className="match-score">{item.matchScore}%</span></div><h2 className="h5 mt-3">{item.internship.title}</h2><p className="small text-secondary">{item.internship.company.name}</p><p className="text-secondary small">{item.explanation}.</p><Link className="small text-decoration-none" to={`/student/internships/${item.internship.id}`}>View details →</Link></div></div>)}</div> : <div className="feature-card mt-4"><h2 className="h5">No recommendations yet</h2><p className="text-secondary mb-0">Add your domain and skills to your profile, then check back here.</p></div>}</div>;
 }
 function InternshipDetail() {
-  const id = window.location.pathname.split("/").pop(); const [item, setItem] = useState(null); const [error, setError] = useState(false);
+  const id = window.location.pathname.split("/").pop(); const [item, setItem] = useState(null); const [error, setError] = useState(false); const [coverNote, setCoverNote] = useState(""); const [applying, setApplying] = useState(false);
   useEffect(() => { api(`/internships/${id}`).then(setItem).catch(() => setError(true)); }, [id]);
+  const apply = async (e) => { e.preventDefault(); setApplying(true); try { await api("/applications", { method: "POST", body: JSON.stringify({ internshipId: Number(id), coverNote }) }); toast.success("Application submitted."); setCoverNote(""); } catch (err) { toast.error(err.message); } finally { setApplying(false); } };
   if (error) return <div className="container py-5"><Link to="/student/internships">← Internships</Link><div className="feature-card mt-4"><h1 className="h5">Internship not found</h1></div></div>;
   if (!item) return <div className="container py-5"><p className="text-secondary">Loading internship…</p></div>;
-  return <div className="container py-5"><Link className="small text-decoration-none" to="/student/internships">← Internships</Link><div className="feature-card mt-4"><div className="eyebrow">{item.domain}</div><h1 className="display-6 fw-semibold mt-3">{item.title}</h1><p className="lead text-secondary">{item.company.name} · {item.location || "Flexible location"}</p><p className="mt-4">{item.description}</p><h2 className="h5 mt-4">Required skills</h2><div className="d-flex flex-wrap gap-2">{item.requiredSkills.map((name) => <span className="badge rounded-pill text-bg-light border p-2" key={name}>{name}</span>)}</div><div className="row mt-4 small text-secondary"><div className="col-sm-4">Work mode<br/><strong className="text-dark">{item.workMode || "Not specified"}</strong></div><div className="col-sm-4">Duration<br/><strong className="text-dark">{item.durationWeeks ? `${item.durationWeeks} weeks` : "Not specified"}</strong></div><div className="col-sm-4">Deadline<br/><strong className="text-dark">{item.applicationDeadline || "Not specified"}</strong></div></div></div></div>;
+  return <div className="container py-5"><Link className="small text-decoration-none" to="/student/internships">← Internships</Link><div className="feature-card mt-4"><div className="eyebrow">{item.domain}</div><h1 className="display-6 fw-semibold mt-3">{item.title}</h1><p className="lead text-secondary">{item.company.name} · {item.location || "Flexible location"}</p><p className="mt-4">{item.description}</p><h2 className="h5 mt-4">Required skills</h2><div className="d-flex flex-wrap gap-2">{item.requiredSkills.map((name) => <span className="badge rounded-pill text-bg-light border p-2" key={name}>{name}</span>)}</div><div className="row mt-4 small text-secondary"><div className="col-sm-4">Work mode<br/><strong className="text-dark">{item.workMode || "Not specified"}</strong></div><div className="col-sm-4">Duration<br/><strong className="text-dark">{item.durationWeeks ? `${item.durationWeeks} weeks` : "Not specified"}</strong></div><div className="col-sm-4">Deadline<br/><strong className="text-dark">{item.applicationDeadline || "Not specified"}</strong></div></div><form className="border-top mt-4 pt-4" onSubmit={apply}><label className="form-label">Cover note <span className="text-secondary">(optional)</span></label><textarea className="form-control mb-3" rows="4" maxLength="2000" value={coverNote} onChange={(e) => setCoverNote(e.target.value)} placeholder="Tell the company why this opportunity fits you." /><button className="btn btn-primary" disabled={applying}>{applying ? "Submitting…" : "Apply now"}</button></form></div></div>;
 }
+function Applications() { const [items, setItems] = useState([]); const [loading, setLoading] = useState(true); useEffect(() => { api("/applications").then((data) => setItems(data.content || [])).catch((err) => toast.error(err.message)).finally(() => setLoading(false)); }, []); return <div className="container py-5"><Link className="small text-decoration-none" to="/student">← Dashboard</Link><div className="eyebrow mt-3">Your progress</div><h1 className="display-6 fw-semibold">Applications</h1><p className="text-secondary">Keep track of every opportunity you’ve pursued.</p>{loading ? <p className="text-secondary mt-5">Loading applications…</p> : items.length ? <div className="row g-3 mt-3">{items.map((item) => <div className="col-12" key={item.id}><div className="feature-card py-3 d-flex flex-wrap align-items-center justify-content-between gap-3"><div><h2 className="h5 mb-1">{item.internship.title}</h2><span className="small text-secondary">{item.internship.company.name} · Applied {new Date(item.appliedAt).toLocaleDateString()}</span></div><span className="badge rounded-pill text-bg-light border">{item.status}</span></div></div>)}</div> : <div className="feature-card mt-4"><h2 className="h5">No applications yet</h2><p className="text-secondary mb-0">When you find the right internship, it will appear here.</p></div>}</div>; }
+function Notifications() { const [items, setItems] = useState([]); const [loading, setLoading] = useState(true); const load = () => api("/notifications").then((data) => setItems(data.content || [])).catch((err) => toast.error(err.message)).finally(() => setLoading(false)); useEffect(() => { load(); }, []); const markRead = async (id) => { try { const updated = await api(`/notifications/${id}/read`, { method: "PATCH" }); setItems(items.map((item) => item.id === id ? updated : item)); } catch (err) { toast.error(err.message); } }; return <div className="container py-5"><Link className="small text-decoration-none" to="/student">← Dashboard</Link><div className="eyebrow mt-3">Stay informed</div><h1 className="display-6 fw-semibold">Notifications</h1><p className="text-secondary">Updates about your applications and opportunities.</p>{loading ? <p className="text-secondary mt-5">Loading notifications…</p> : items.length ? <div className="row g-3 mt-3">{items.map((item) => <div className="col-12" key={item.id}><div className={`feature-card py-3 ${!item.readAt ? "border border-primary-subtle" : ""}`}><div className="d-flex justify-content-between gap-3"><div><h2 className="h5 mb-1">{item.title}</h2><p className="text-secondary mb-1">{item.message}</p><span className="small text-secondary">{new Date(item.createdAt).toLocaleString()}</span></div>{!item.readAt && <button className="btn btn-sm btn-outline-primary align-self-start" onClick={() => markRead(item.id)}>Mark read</button>}</div></div></div>)}</div> : <div className="feature-card mt-4"><h2 className="h5">You’re all caught up</h2><p className="text-secondary mb-0">New updates will appear here.</p></div>}</div>; }
 function Dashboard({ role }) {
   return (
     <div className="container py-5">
@@ -390,16 +396,17 @@ function Dashboard({ role }) {
               Browse opportunities across every academic and professional domain.
             </p>
             {role === "STUDENT" && <Link className="stretched-link" to="/student/internships">Browse internships</Link>}
+            {role === "STUDENT" && <Link className="small d-block mt-2 position-relative" to="/student/recommendations">View recommendations</Link>}
           </div>
         </div>
         <div className="col-md-4">
           <div className="feature-card">
             <span>03</span>
-            <h2 className="h5 mt-4">Recommendations</h2>
+            <h2 className="h5 mt-4">Applications</h2>
             <p className="text-secondary mb-0">
-              See transparent match scores tailored to your profile.
+              Track every application and status in one calm workspace.
             </p>
-            {role === "STUDENT" && <Link className="stretched-link" to="/student/recommendations">View recommendations</Link>}
+            {role === "STUDENT" && <Link className="stretched-link" to="/student/applications">View applications</Link>}
           </div>
         </div>
       </div>
@@ -442,6 +449,8 @@ function App() {
         <Route path="/student/internships" element={<Protected role="STUDENT"><InternshipBrowse /></Protected>} />
         <Route path="/student/internships/:id" element={<Protected role="STUDENT"><InternshipDetail /></Protected>} />
         <Route path="/student/recommendations" element={<Protected role="STUDENT"><Recommendations /></Protected>} />
+        <Route path="/student/applications" element={<Protected role="STUDENT"><Applications /></Protected>} />
+        <Route path="/student/notifications" element={<Protected role="STUDENT"><Notifications /></Protected>} />
         <Route
           path="/admin"
           element={

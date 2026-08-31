@@ -28,6 +28,8 @@ Set `VITE_API_URL` when the API is not running at `http://localhost:8080/api`.
 - Student profile editor with normalized skill add/remove controls
 - Student internship browsing with search and domain filters
 - Ranked recommendation cards with explainable match scores and internship details
+- Internship detail application form and student application tracking
+- Notification center with unread counts and read-state controls
 - JWT session storage and logout
 - Backend-authorized student/admin route guards
 - Student and admin dashboard entry points
