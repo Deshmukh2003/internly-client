@@ -75,3 +75,6 @@ main {
   font-weight: 800;
   font-size: 1.05rem;
 }
+.status-select {
+  max-width: 150px;
+}
