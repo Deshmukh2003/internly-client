@@ -70,3 +70,8 @@ main {
   color: var(--blue);
   font-weight: 700;
 }
+.match-score {
+  color: var(--blue);
+  font-weight: 800;
+  font-size: 1.05rem;
+}

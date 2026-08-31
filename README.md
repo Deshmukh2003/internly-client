@@ -24,6 +24,10 @@ Set `VITE_API_URL` when the API is not running at `http://localhost:8080/api`.
 - Internly branded responsive shell
 - Common login page for students and admins
 - Student registration, email verification OTP, and resend-code screens
+- Forgot-password and password-reset screens
+- Student profile editor with normalized skill add/remove controls
+- Student internship browsing with search and domain filters
+- Ranked recommendation cards with explainable match scores and internship details
 - JWT session storage and logout
 - Backend-authorized student/admin route guards
 - Student and admin dashboard entry points
