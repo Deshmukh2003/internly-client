@@ -48,6 +48,7 @@ The client is being developed in vertical slices alongside the separate `internl
 - `src/pages/auth` — login, registration, OTP, and password recovery pages.
 - `src/pages/student` — profile, internships, recommendations, applications, and notifications.
 - `src/pages/admin` — admin operations workspace.
+- `src/pages/admin/components` — focused company, internship, and application-review panels.
 - `src/routes` — centralized route definitions.
 - `src/assets` — tracked visual assets such as the Internly logo.
 
