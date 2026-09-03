@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { api } from "../api/http";
 import { clearSession, getSession } from "../auth/session";
 import BrandLogo from "../components/BrandLogo";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function AppShell({ children }) {
   const session = getSession();
@@ -15,6 +15,12 @@ export default function AppShell({ children }) {
       api("/notifications/unread-count").then(setUnread).catch(() => {});
     }
   }, [session?.role]);
+
+  useEffect(() => {
+    const handleExpiredSession = () => { clearSession(); toast.info("Your session expired. Please sign in again."); navigate("/login", { replace: true }); };
+    window.addEventListener("internly:session-expired", handleExpiredSession);
+    return () => window.removeEventListener("internly:session-expired", handleExpiredSession);
+  }, [navigate]);
 
   const logout = () => {
     clearSession();

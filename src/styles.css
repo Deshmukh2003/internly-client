@@ -71,6 +71,8 @@ main {
   color: var(--blue);
   font-weight: 700;
 }
+.internship-card { height: 330px; overflow: hidden; display: flex; flex-direction: column; }
+.internship-description { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
 .match-score {
   color: var(--blue);
   font-weight: 800;
@@ -79,3 +81,34 @@ main {
 .status-select {
   max-width: 150px;
 }
+.admin-internship-list { display: grid; gap: 12px; }
+.admin-internship-card { background: white; border-radius: 14px; padding: 18px 22px; box-shadow: 0 6px 22px rgba(31, 41, 51, 0.05); display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.admin-internship-main { min-width: 0; }
+.admin-internship-main h3 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.admin-internship-meta { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-shrink: 0; }
+@media (max-width: 640px) { .admin-internship-card { align-items: flex-start; flex-direction: column; } .admin-internship-meta { justify-content: flex-start; flex-wrap: wrap; } }
+.admin-company-list, .admin-application-list { display: grid; gap: 12px; }
+.admin-company-card, .admin-application-card { background: white; border-radius: 14px; padding: 16px 20px; box-shadow: 0 6px 22px rgba(31, 41, 51, 0.05); display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.admin-company-main, .admin-application-main { min-width: 0; }
+.admin-company-heading { display: flex; align-items: center; gap: 8px; }
+.admin-card-actions, .admin-application-controls { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-shrink: 0; }
+@media (max-width: 640px) { .admin-company-card, .admin-application-card { align-items: flex-start; flex-direction: column; } .admin-card-actions, .admin-application-controls { justify-content: flex-start; flex-wrap: wrap; } }
+.notification-list { display: grid; gap: 12px; }
+.notification-card { background: white; border-radius: 14px; padding: 16px 20px; box-shadow: 0 6px 22px rgba(31, 41, 51, 0.05); display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.notification-unread { border-left: 4px solid var(--blue); padding-left: 16px; }
+.notification-content { min-width: 0; }
+.notification-heading { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+.notification-action { flex-shrink: 0; }
+@media (max-width: 640px) { .notification-card { align-items: flex-start; flex-direction: column; } }
+.student-hero { background: white; border-radius: 20px; padding: 32px; box-shadow: 0 8px 30px rgba(31, 41, 51, 0.05); display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 360px); gap: 32px; align-items: center; }
+.profile-summary { background: #f6f8ff; border: 1px solid #e2e8ff; border-radius: 16px; padding: 20px; }
+.profile-percentage { color: var(--blue); font-size: 1.5rem; line-height: 1; }
+.profile-progress { height: 8px; }
+.student-action-grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 16px; }
+.student-action-card { background: white; border-radius: 16px; padding: 24px; box-shadow: 0 6px 22px rgba(31, 41, 51, 0.05); }
+.student-action-card p { max-width: 600px; }
+.student-card-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.student-apply-note { color: #52616b; font-size: 0.9rem; }
+.profile-required-callout { background: #f6f8ff; border: 1px solid #dbe4ff; border-radius: 14px; padding: 16px; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+@media (max-width: 768px) { .student-hero, .student-action-grid { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .student-hero { padding: 24px; } .profile-required-callout { align-items: flex-start; flex-direction: column; } }

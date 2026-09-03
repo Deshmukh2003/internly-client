@@ -24,14 +24,15 @@ Set `VITE_API_URL` when the API is not running at `http://localhost:8080/api`.
 - Internly branded responsive shell
 - Common login page for students and admins
 - Student registration, email verification OTP, and resend-code screens
+- Returning unverified students continue directly to OTP verification, with a persisted resend countdown
 - Forgot-password and password-reset screens
-- Student profile editor with normalized skill add/remove controls
+- Student profile editor with controlled branch and qualification selections, normalized skills, and completion tracking
 - Resume upload/removal with profile completion indicator
 - Student internship browsing with search and domain filters
 - Ranked recommendation cards with explainable match scores and internship details
-- Internship detail application form and student application tracking
+- Profile-aware student dashboard, gated internship applications, and student application tracking
 - Notification center with unread counts and read-state controls
-- Admin workspace for company listing/creation, internship overview, and application status review
+- Admin workspace with controlled internship qualification, branch, and work-mode inputs plus compact responsive management cards
 - JWT session storage and logout
 - Backend-authorized student/admin route guards
 - Student and admin dashboard entry points
