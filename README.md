@@ -30,9 +30,11 @@ Set `VITE_API_URL` when the API is not running at `http://localhost:8080/api`.
 - Resume upload/removal with profile completion indicator
 - Student internship browsing with search and domain filters
 - Ranked recommendation cards with explainable match scores and internship details
+- Applied-state badges and disabled application actions for internships already pursued
 - Profile-aware student dashboard, gated internship applications, and student application tracking
 - Notification center with unread counts and read-state controls
 - Admin workspace with controlled internship qualification, branch, and work-mode inputs plus compact responsive management cards
+- One-click removable dummy dataset controls for end-to-end testing
 - JWT session storage and logout
 - Backend-authorized student/admin route guards
 - Student and admin dashboard entry points
