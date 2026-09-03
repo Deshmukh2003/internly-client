@@ -60,6 +60,7 @@ main {
   letter-spacing: -0.04em;
 }
 .feature-card {
+  position: relative;
   background: white;
   min-height: 210px;
   border-radius: 18px;
